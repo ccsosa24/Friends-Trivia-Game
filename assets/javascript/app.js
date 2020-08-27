@@ -1,7 +1,9 @@
 var questionCounter = 0;
-var time = 10;
+var timer = 10;
 var correctGuess = 0;
 var incorrectGuess = 0;
+var score = 0;
+
 
 // Questions
 var friendsQuestions = [
@@ -54,3 +56,26 @@ var friendsQuestions = [
 }
 
 ]
+
+var game = {
+    question: friendsQuestions,
+    
+}
+
+
+
+
+
+
+
+// Startgame
+$("#startbtn").on('click', function() {
+    $(this).hide();
+    newGame();
+});
+
+$("#startbtn").click(function() {
+    $("#startbtn").remove();
+    $("#time").html(counter);
+    loadQuestion();
+})
