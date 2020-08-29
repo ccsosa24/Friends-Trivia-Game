@@ -59,7 +59,31 @@ var friendsQuestions = [
 
 var game = {
     question: friendsQuestions,
+    currentQuestion: 0,
+    counter: countStartNumber,
+    correct: 0,
+    incorrect: 0,
+
+    countdown: function() {
+        game.counter--;
+        $("#counter-number").text(game.counter);
+
+        if (game.counter === 0) {
+            game.timeUp();
+        }
+    },
+
+
+loadQuestion: function() {
+    time = setInterval(game.countdown, 1000);
     
+}
+
+
+
+
+
+
 }
 
 
