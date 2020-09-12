@@ -53,12 +53,12 @@ var friendsQuestions = [
     question:"What is the name of the coffee house?",
     choices: ["Coffee Perk", "Park Perk", "Left Perk", "Central Perk"],
     correctAnswer: "Central Perk",
-}
+}];
 
-]
+
 
 var game = {
-    question: friendsQuestions,
+    questions: friendsQuestions,
     currentQuestion: 0,
     counter: countStartNumber,
     correct: 0,
@@ -75,8 +75,22 @@ var game = {
 
 
 loadQuestion: function() {
-    time = setInterval(game.countdown, 1000);
-    
+    timer = setInterval(game.countdown, 1000);
+
+    Card.html("<h2" + questions [this.currentQuestion].question + "<h2");
+    for(var i = 0; i < questions[this.currentQuestion].answers.length; i++) {
+        card.append("<button class='answer-button' id='button' data-name=' " + questions[this.currentQuestion].answers[i] + "'>" + questions[this.currentQuestion].answers[i] + "</button>");
+    }     
+},
+
+nextQuestion: function() {
+    game.counter = countStartNumber;
+    $("#counter-number").text(game.counter);
+    game.currentQuestion++;
+    game.loadQuestion();
+},
+
+timeUp: function(){
     
 }
 

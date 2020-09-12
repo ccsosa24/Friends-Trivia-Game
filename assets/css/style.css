@@ -16,7 +16,7 @@
 
 #time {
     color: green;
-    background-color: transparent;
+  
 }
 
 #game {
@@ -61,9 +61,9 @@
     border: 0;
     vertical-align: middle;
     text-decoration: none;
-    font-size: 1.0rem;
+    font-size: .10rem;
       color:var(--colorShadeA);
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
     font-family: inherit;
   }
