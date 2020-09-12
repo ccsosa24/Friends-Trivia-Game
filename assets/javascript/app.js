@@ -77,6 +77,7 @@ var game = {
 loadQuestion: function() {
     time = setInterval(game.countdown, 1000);
     
+    
 }
 
 
