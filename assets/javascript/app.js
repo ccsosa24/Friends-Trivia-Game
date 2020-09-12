@@ -91,6 +91,22 @@ nextQuestion: function() {
 },
 
 timeUp: function(){
+    clearInterval(timer);
+    $("#counter-number").html(game.counter);
+
+    card.html("<h2>Ahh Time's Up!</h2>");
+    card.append("<h3>Correct Answer is: " + questions[this.currentQuestion].correctAnswer);
+    card.append("<img src='" + questions[this.currentQuestion].image + "' />");
+
+    if(game.currentQuestion == question.length - 1) {
+        setTimeout(game.results, 3 * 1000);
+    }
+    else {
+        setTimeout(game.nextQuestion, 3 * 1000);
+    }
+},
+
+results: function(){
     
 }
 
