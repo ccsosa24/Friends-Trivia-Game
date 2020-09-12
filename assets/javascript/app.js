@@ -94,7 +94,7 @@ timeUp: function(){
     clearInterval(timer);
     $("#counter-number").html(game.counter);
 
-    card.html("<h2>Ahh Time's Up!</h2>");
+    card.html("<h2>Oh. My. God! Time's Up!</h2>");
     card.append("<h3>Correct Answer is: " + questions[this.currentQuestion].correctAnswer);
     card.append("<img src='" + questions[this.currentQuestion].image + "' />");
 
@@ -107,7 +107,14 @@ timeUp: function(){
 },
 
 results: function(){
+    clearInterval(timer);
     
+    card.html("<h2>All done, heres how you did!</h2>");
+
+    $("#counter-number").text(game.counter);
+
+    
+
 }
 
 
