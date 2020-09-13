@@ -1,8 +1,7 @@
-var questionCounter = 0;
-var timer = 10;
-var correctGuess = 0;
-var incorrectGuess = 0;
-var score = 0;
+var card = $("#quiz-area");
+var countStartNumber = 10;
+var timer;
+
 
 
 // Questions
@@ -153,36 +152,34 @@ answeredCorrectly: function() {
     game.correct++;
 
     card.html("<h2>Correct!<h2>");
-    card.append("<img src='" + this.questions.length - 1) {
+    card.append("<img src='" + question[game.currectQuestion].image + "' />"); 
+    
+    if (game.currentQuestion === question.length - 1) {
+        setTimeout(game.nextQuestion, 3 * 1000);
+    }
+    else {
         setTimeout(game.nextQuestion, 3 * 1000);
     }
 },
 
 reset: function() {
+    this.currentQuestion = 0;
+    this.counter = countStartNumber;
+    this.correct = 0;
+    this.incorrect = 0;
+    this.loadQuestion();
 
 }
+};
 
 
 
-
-
-
-}
-
-
-
-
-
-
-
-// Startgame
-$("#startbtn").on('click', function() {
-    $(this).hide();
-    newGame();
+$(document).on("click", "#start-over", function() {
+    game.reset();
 });
-
-$("#startbtn").click(function() {
-    $("#startbtn").remove();
-    $("#time").html(counter);
-    loadQuestion();
+$(document).on("click", ".answer-button", function(e) {
+    game.clicked(e);
+});
+$(document).on("click", "#start", function() {
+    $("#sub-wrapper").prepend("<h2>Time Remaining: <span id='counter-number'>10</span> Seconds</h2>");
 })
