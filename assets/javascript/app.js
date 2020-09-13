@@ -113,7 +113,52 @@ results: function(){
 
     $("#counter-number").text(game.counter);
 
-    
+    card.append("<h3>Correct Answer: " + game.correct + "</h3>");
+    card.append("<h3>Incorrect Answer: " + game.incorrect + "</h3>");
+    card.append("<h3>Unanswered: " + (questions.length - (game.incorrect + game.correct)) + "</h3>");
+    card.append("<br><button id='start-over'>Start Over?</button>");
+},
+
+clicked: function(e) {
+    clearInterval(timer);
+    if($(e,target).attr("data-name") == questions[this.currentQuestion].correctAnswer) {
+        this.answeredCorrectly();
+    }
+    else {
+        this.answeredIncorrectly();
+    }
+
+},
+
+answeredIncorrectly: function() {
+    game.incorrect++;
+
+    clearInterval(timer);
+
+    card.html("<h2>Nope!</h2>");
+    card.append("<h3>The Correct Answer was: " + questions[game.currentQuestion].correctAnswer + "</h3>");
+    card.append("<img src=' " + questions[game.currentQuestion].image + "' />");
+
+    if (game.currentQuestion === this.questions.length - 1) {
+        setTimeout(game.results, 3 * 1000);
+    }
+    else {
+        setTimerout(game.nextQuestion, 3 * 1000);
+    }
+},
+
+answeredCorrectly: function() {
+    clearInterval(timer);
+
+    game.correct++;
+
+    card.html("<h2>Correct!<h2>");
+    card.append("<img src='" + this.questions.length - 1) {
+        setTimeout(game.nextQuestion, 3 * 1000);
+    }
+},
+
+reset: function() {
 
 }
 
