@@ -76,7 +76,7 @@ var game = {
 loadQuestion: function() {
     timer = setInterval(game.countdown, 1000);
 
-    Card.html("<h2" + questions [this.currentQuestion].question + "<h2");
+    card.html("<h2" + questions [this.currentQuestion].question + "<h2");
     for(var i = 0; i < questions[this.currentQuestion].answers.length; i++) {
         card.append("<button class='answer-button' id='button' data-name=' " + questions[this.currentQuestion].answers[i] + "'>" + questions[this.currentQuestion].answers[i] + "</button>");
     }     
@@ -93,15 +93,15 @@ timeUp: function(){
     clearInterval(timer);
     $("#counter-number").html(game.counter);
 
-    card.html("<h2>Oh. My. God! Time's Up!</h2>");
+    card.html("<h2>Pivot! Pivot! Piivvoottt!!! Time's Up!</h2>");
     card.append("<h3>Correct Answer is: " + questions[this.currentQuestion].correctAnswer);
     card.append("<img src='" + questions[this.currentQuestion].image + "' />");
 
-    if(game.currentQuestion == question.length - 1) {
-        setTimeout(game.results, 3 * 1000);
+    if(game.currentQuestion == questions.length - 1) {
+        setTimeout(game.results, 1 * 1000);
     }
     else {
-        setTimeout(game.nextQuestion, 3 * 1000);
+        setTimeout(game.nextQuestion, 1 * 1000);
     }
 },
 
@@ -139,10 +139,10 @@ answeredIncorrectly: function() {
     card.append("<img src=' " + questions[game.currentQuestion].image + "' />");
 
     if (game.currentQuestion === this.questions.length - 1) {
-        setTimeout(game.results, 3 * 1000);
+        setTimeout(game.results, 1 * 1000);
     }
     else {
-        setTimerout(game.nextQuestion, 3 * 1000);
+        setTimerout(game.nextQuestion, 1 * 1000);
     }
 },
 
@@ -152,13 +152,13 @@ answeredCorrectly: function() {
     game.correct++;
 
     card.html("<h2>Correct!<h2>");
-    card.append("<img src='" + question[game.currectQuestion].image + "' />"); 
+    card.append("<img src='" + questions[game.currentQuestion].image + "' />"); 
     
-    if (game.currentQuestion === question.length - 1) {
-        setTimeout(game.nextQuestion, 3 * 1000);
+    if (game.currentQuestion === questions.length - 1) {
+        setTimeout(game.nextQuestion, 1 * 1000);
     }
     else {
-        setTimeout(game.nextQuestion, 3 * 1000);
+        setTimeout(game.nextQuestion, 1 * 1000);
     }
 },
 
@@ -181,5 +181,6 @@ $(document).on("click", ".answer-button", function(e) {
     game.clicked(e);
 });
 $(document).on("click", "#start", function() {
-    $("#sub-wrapper").prepend("<h2>Time Remaining: <span id='counter-number'>10</span> Seconds</h2>");
-})
+    $("#wrapper").prepend("<h2>Time Remaining: <span id='counter-number'>10</span> Seconds</h2>");
+    game.loadQuestion();
+});
