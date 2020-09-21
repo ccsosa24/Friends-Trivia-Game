@@ -1,11 +1,11 @@
-var card = $("#quiz-area");
-var countStartNumber = 10;
+var counter = 10;
+var currentQuestion = 0;
+var score = 0;
+var lost = 0;
 var timer;
 
-
-
 // Questions
-var friendsQuestions = [
+var quizQuestions = [
     {
     question: "To get over Ricard, what did Monica start Making?",
     choices: ["Marmalade", "Jam", "Pancakes", "Eggs"],
@@ -56,131 +56,264 @@ var friendsQuestions = [
 
 
 
-var game = {
-    questions: friendsQuestions,
-    currentQuestion: 0,
-    counter: countStartNumber,
-    correct: 0,
-    incorrect: 0,
 
-    countdown: function() {
-        game.counter--;
-        $("#counter-number").text(game.counter);
+function nextQuestion() {
+  counter = 10;
+  clearInterval(timer);
+  timer = setInterval(countDown, 1000);
 
-        if (game.counter === 0) {
-            game.timeUp();
-        }
-    },
-
-
-loadQuestion: function() {
-    timer = setInterval(game.countdown, 1000);
-
-    card.html("<h2" + questions [this.currentQuestion].question + "<h2");
-    for(var i = 0; i < questions[this.currentQuestion].answers.length; i++) {
-        card.append("<button class='answer-button' id='button' data-name=' " + questions[this.currentQuestion].answers[i] + "'>" + questions[this.currentQuestion].answers[i] + "</button>");
-    }     
-},
-
-nextQuestion: function() {
-    game.counter = countStartNumber;
-    $("#counter-number").text(game.counter);
-    game.currentQuestion++;
-    game.loadQuestion();
-},
-
-timeUp: function(){
-    clearInterval(timer);
-    $("#counter-number").html(game.counter);
-
-    card.html("<h2>Pivot! Pivot! Piivvoottt!!! Time's Up!</h2>");
-    card.append("<h3>Correct Answer is: " + questions[this.currentQuestion].correctAnswer);
-    card.append("<img src='" + questions[this.currentQuestion].image + "' />");
-
-    if(game.currentQuestion == questions.length - 1) {
-        setTimeout(game.results, 1 * 1000);
-    }
-    else {
-        setTimeout(game.nextQuestion, 1 * 1000);
-    }
-},
-
-results: function(){
-    clearInterval(timer);
-    
-    card.html("<h2>All done, heres how you did!</h2>");
-
-    $("#counter-number").text(game.counter);
-
-    card.append("<h3>Correct Answer: " + game.correct + "</h3>");
-    card.append("<h3>Incorrect Answer: " + game.incorrect + "</h3>");
-    card.append("<h3>Unanswered: " + (questions.length - (game.incorrect + game.correct)) + "</h3>");
-    card.append("<br><button id='start-over'>Start Over?</button>");
-},
-
-clicked: function(e) {
-    clearInterval(timer);
-    if($(e,target).attr("data-name") == questions[this.currentQuestion].correctAnswer) {
-        this.answeredCorrectly();
-    }
-    else {
-        this.answeredIncorrectly();
-    }
-
-},
-
-answeredIncorrectly: function() {
-    game.incorrect++;
-
-    clearInterval(timer);
-
-    card.html("<h2>Nope!</h2>");
-    card.append("<h3>The Correct Answer was: " + questions[game.currentQuestion].correctAnswer + "</h3>");
-    card.append("<img src=' " + questions[game.currentQuestion].image + "' />");
-
-    if (game.currentQuestion === this.questions.length - 1) {
-        setTimeout(game.results, 1 * 1000);
-    }
-    else {
-        setTimerout(game.nextQuestion, 1 * 1000);
-    }
-},
-
-answeredCorrectly: function() {
-    clearInterval(timer);
-
-    game.correct++;
-
-    card.html("<h2>Correct!<h2>");
-    card.append("<img src='" + questions[game.currentQuestion].image + "' />"); 
-    
-    if (game.currentQuestion === questions.length - 1) {
-        setTimeout(game.nextQuestion, 1 * 1000);
-    }
-    else {
-        setTimeout(game.nextQuestion, 1 * 1000);
-    }
-},
-
-reset: function() {
-    this.currentQuestion = 0;
-    this.counter = countStartNumber;
-    this.correct = 0;
-    this.incorrect = 0;
-    this.loadQuestion();
-
+  const isQuestionOver = (quizQuestions.length - 1) === currentQuestion;
+  if(isQuestionOver){
+    console.log('Game Over!!!');
+    displayResult();
+  }
+  else{
+    currentQuestion++;
+    loadQuestion();
+  }
 }
-};
 
 
 
-$(document).on("click", "#start-over", function() {
-    game.reset();
+
+function timeUp(){
+  clearInterval(timer);
+
+  lost++;
+
+  setTimeout(nextQuestion, 2 * 1000);
+}
+
+function countDown(){
+  console.log(counter);
+  console.log("below is the COUNTER")
+  counter--;
+  $('#time').html('Timer: ' + counter);
+
+  if (counter === 0) {
+    timeUp();
+  }
+}
+
+
+
+
+
+function loadChoices(choices){
+  var result = '';
+
+  for(var i = 0; i < choices.length; i++) {
+    result += `<p class="choice" data-answer="${choices[i]}">${choices[i]}</p>
+`}
+  return result;
+}
+
+function loadQuestion() {
+  counter = 10;
+  clearInterval(timer);
+  timer = setInterval(countDown, 1000);
+  console.log("below are the quiz questions -----------")
+  //console.log(quizQuestions)
+  const question = quizQuestions[currentQuestion].question;
+  const choices = quizQuestions[currentQuestion].choices;
+
+  $('#time').html('Timer: ' + counter);
+  $('#game').html(`<h4>${question}</h4>      
+    ${loadChoices(choices)}
+  
+  `);
+}
+
+
+
+$(document).on('click', '.choice', function() {
+  clearInterval(timer);
+  const selectedAnswer = $(this).attr('data-answer');
+  const correctAnswer = quizQuestions[currentQuestion].correctAnswer;
+
+  if (correctAnswer === selectedAnswer){
+    score++;
+    console.log('Win');
+    //preloadImage();
+    setTimeout(nextQuestion, 2 * 1000);
+  }
+  else {
+    lost++;
+    console.log('Lost');
+    //preloadImage();
+    setTimeout(nextQuestion, 2 * 1000);
+  }
 });
-$(document).on("click", ".answer-button", function(e) {
-    game.clicked(e);
+
+function displayResult() {
+ clearInterval(timer);
+  const result = `
+  <p>You have ${score} questions right</p>
+  <p>You missed ${lost} questions</p>
+  <p>Total questions ${quizQuestions.length} question right</p>
+  <button class="btn btn-primary" id="reset">Reset Game</button>`
+  
+  $('#game').html(result);
+}
+
+
+$(document).on('click', '#reset', function(){
+  counter = 10;
+  currentQuestion = 0;
+  score = 0;
+  lost = 0;
+  timer = null;
+
+  loadQuestion();
 });
-$(document).on("click", "#start", function() {
-    $("#wrapper").prepend("<h2>Time Remaining: <span id='counter-number'>10</span> Seconds</h2>");
-    game.loadQuestion();
+
+
+
+
+$('#start').click(function(){
+  $('#start').remove();
+  $('#time').html(counter);
+  loadQuestion();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// var game = {
+//     questions: questions,
+//     currentQuestion: 0,
+//     counter: countStartNumber,
+//     correct: 0,
+//     incorrect: 0,
+
+//     countdown: function() {
+//         game.counter--;
+//         $("#counter-number").text(game.counter);
+
+//         if (game.counter === 0) {
+//             game.timeUp();
+//         }
+//     },
+
+
+// loadQuestion: function() {
+//     timer = setInterval(game.countdown, 1000);
+
+//     card.html("<h2" + questions [this.currentQuestion].question + "<h2");
+//     for(var i = 0; i < questions[this.currentQuestion].answers.length; i++) {
+//         card.append("<button class='answer-button' id='button' data-name=' " + questions[this.currentQuestion].answers[i] + "'>" + questions[this.currentQuestion].answers[i] + "</button>");
+//     }     
+// },
+
+// nextQuestion: function() {
+//     game.counter = countStartNumber;
+//     $("#counter-number").text(game.counter);
+//     game.currentQuestion++;
+//     game.loadQuestion();
+// },
+
+// timeUp: function(){
+//     clearInterval(timer);
+//     $("#counter-number").html(game.counter);
+
+//     card.html("<h2>Pivot! Pivot! Piivvoottt!!! Time's Up!</h2>");
+//     card.append("<h3>Correct Answer is: " + questions[this.currentQuestion].correctAnswer);
+//     card.append("<img src='" + questions[this.currentQuestion].image + "' />");
+
+//     if(game.currentQuestion == questions.length - 1) {
+//         setTimeout(game.results, 1 * 1000);
+//     }
+//     else {
+//         setTimeout(game.nextQuestion, 1 * 1000);
+//     }
+// },
+
+// results: function(){
+//     clearInterval(timer);
+    
+//     card.html("<h2>All done, heres how you did!</h2>");
+
+//     $("#counter-number").text(game.counter);
+
+//     card.append("<h3>Correct Answer: " + game.correct + "</h3>");
+//     card.append("<h3>Incorrect Answer: " + game.incorrect + "</h3>");
+//     card.append("<h3>Unanswered: " + (questions.length - (game.incorrect + game.correct)) + "</h3>");
+//     card.append("<br><button id='start-over'>Start Over?</button>");
+// },
+
+// clicked: function(e) {
+//     clearInterval(timer);
+//     if($(e,target).attr("data-name") == questions[this.currentQuestion].correctAnswer) {
+//         this.answeredCorrectly();
+//     }
+//     else {
+//         this.answeredIncorrectly();
+//     }
+
+// },
+
+// answeredIncorrectly: function() {
+//     game.incorrect++;
+
+//     clearInterval(timer);
+
+//     card.html("<h2>Nope!</h2>");
+//     card.append("<h3>The Correct Answer was: " + questions[game.currentQuestion].correctAnswer + "</h3>");
+//     card.append("<img src=' " + questions[game.currentQuestion].image + "' />");
+
+//     if (game.currentQuestion === this.questions.length - 1) {
+//         setTimeout(game.results, 1 * 1000);
+//     }
+//     else {
+//         setTimerout(game.nextQuestion, 1 * 1000);
+//     }
+// },
+
+// answeredCorrectly: function() {
+//     clearInterval(timer);
+
+//     game.correct++;
+
+//     card.html("<h2>Correct!<h2>");
+//     card.append("<img src='" + questions[game.currentQuestion].image + "' />"); 
+    
+//     if (game.currentQuestion === questions.length - 1) {
+//         setTimeout(game.nextQuestion, 1 * 1000);
+//     }
+//     else {
+//         setTimeout(game.nextQuestion, 1 * 1000);
+//     }
+// },
+
+// reset: function() {
+//     this.currentQuestion = 0;
+//     this.counter = countStartNumber;
+//     this.correct = 0;
+//     this.incorrect = 0;
+//     this.loadQuestion();
+
+// }
+// };
+
+
+
+// $(document).on("click", "#start-over", function() {
+//     game.reset();
+// });
+// $(document).on("click", ".answer-button", function(e) {
+//     game.clicked(e);
+// });
+// $(document).on("click", "#start", function() {
+//     $("#wrapper").prepend("<h2>Time Remaining: <span id='counter-number'>10</span> Seconds</h2>");
+//     game.loadQuestion();
+// });
