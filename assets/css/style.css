@@ -21,11 +21,15 @@
 
 #game {
     color: blueviolet;
-    
+
 }
 
 #start {
     background-color: rebeccapurple;
+}
+
+#gameBackg {
+    background-color: pink;
 }
 
 
