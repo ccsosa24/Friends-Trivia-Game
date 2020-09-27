@@ -32,7 +32,7 @@
 }
 
 #start {
-    background: url(/assets/images/friendscouch.jpg);
+    background: url(/assets/images/friendscouch.jpg) no-repeat;
     cursor: pointer;
     border: none;
     
