@@ -32,8 +32,10 @@
 }
 
 #start {
-    background-color: rebeccapurple;
-    background-image: url("friendscouch.jpg");
+    background: url(/assets/images/friendscouch.jpg);
+    cursor: pointer;
+    border: none;
+    
 }
 
 #gameBackg {
